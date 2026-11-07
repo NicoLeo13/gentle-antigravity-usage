@@ -1,0 +1,21 @@
+{
+	"name": "pi-gentle-antigravity-usage",
+	"version": "0.1.0",
+	"description": "Gentle Shell usage source for Google Antigravity quota, fed by the pi-antigravity-acp-provider snapshot event",
+	"type": "module",
+	"license": "MIT",
+	"keywords": [
+		"pi-package",
+		"pi-extension",
+		"gentle-shell",
+		"antigravity",
+		"google",
+		"quota",
+		"usage"
+	],
+	"pi": {
+		"extensions": [
+			"./extensions/index.ts"
+		]
+	}
+}
