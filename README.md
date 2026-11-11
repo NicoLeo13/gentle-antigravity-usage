@@ -44,6 +44,33 @@ Imported from two installed components (versions documented, not vendored):
 If either side renames a channel, this package stops feeding the panel (gracefully: the panel
 falls back to its pending note).
 
+## Cost backfill
+
+`scripts/backfill-costs.ts` retro-prices historical Pi session files that were recorded before
+`pi-antigravity-acp-provider` priced turns (the provider used to hardcode `cost: 0`). It applies
+the same models.dev catalog rates as the provider patch, computes cost exactly the way pi-ai's
+`calculateCost` does (including the 3.1 Pro >200k tier), and rewrites files atomically with a
+`.bak` of each original.
+
+Rules worth knowing:
+
+- Only assistant messages of provider `antigravity-acp` with `cost.total === 0` and positive
+  per-category tokens are touched.
+- Messages that reported only a cumulative `totalTokens` with no input/output/cache split
+  (typical streaming `toolUse` updates) are **left at zero**: pricing them would require
+  inventing a token breakdown.
+- Zero-token turns (`stopReason: error`, empty replies) are left alone — there is nothing to
+  price.
+- Files modified more recently than `--min-age-seconds` (default 120) are skipped, as are paths
+  passed via `--open` (sessions attached to a live pane). Pi appends to session files by path
+  (`appendFileSync`), so a rewrite-by-rename never loses future appends, but the running
+  process keeps its in-memory view until the pane is restarted — restart the pane first, then
+  backfill, to see the recovered totals.
+
+```sh
+bun scripts/backfill-costs.ts [--root <sessions-dir>] [--min-age-seconds N] [--open <session.jsonl> ...]
+```
+
 ## License
 
 MIT.
