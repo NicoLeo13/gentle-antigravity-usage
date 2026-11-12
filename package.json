@@ -4,6 +4,10 @@
 	"description": "Gentle Shell usage source for Google Antigravity quota, fed by the pi-antigravity-acp-provider snapshot event",
 	"type": "module",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NicoLeo13/gentle-antigravity-usage.git"
+	},
 	"keywords": [
 		"pi-package",
 		"pi-extension",
