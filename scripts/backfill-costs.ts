@@ -28,6 +28,8 @@ const DEFAULT_ROOT = join(HOME, ".gentle-shell/agent/sessions");
 // Catalog rates (USD per million tokens), mirroring the provider patch.
 const FLASH = { input: 0.75, output: 3.75, cacheRead: 0.075, cacheWrite: 0 };
 const ARGON = { input: 2, output: 10, cacheRead: 0.1, cacheWrite: 0 };
+const CARBON = { input: 2, output: 10, cacheRead: 0.1, cacheWrite: 0 };
+const HYDROGEN = { input: 1.5, output: 7.5, cacheRead: 0.075, cacheWrite: 0 };
 const PRO = {
 	input: 2,
 	output: 12,
@@ -40,9 +42,11 @@ const ZERO = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 };
 type Rates = { input: number; output: number; cacheRead: number; cacheWrite: number; tiers?: { input: number; output: number; cacheRead: number; cacheWrite: number; inputTokensAbove: number }[] };
 
 function ratesFor(model: string): Rates | undefined {
-	const base = model.replace(/-(low|medium|high)$/u, "");
+	const base = model.replace(/-(low|medium|high|xhigh)$/u, "");
 	if (/^gemini-3\.[678]-flash$/u.test(base)) return FLASH;
+	if (/^gemini-4-hydrogen$/u.test(base)) return HYDROGEN;
 	if (/^gemini-4-argon$/u.test(base)) return ARGON;
+	if (/^gemini-4-carbon$/u.test(base)) return CARBON;
 	if (/^(gemini-3\.1-pro|gemini-pro-agent)$/u.test(base)) return PRO;
 	return undefined;
 }
